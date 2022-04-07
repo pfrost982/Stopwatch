@@ -12,7 +12,16 @@ class StopwatchListOrchestrator(private val scope: CoroutineScope) {
             return System.currentTimeMillis()
         }
     }
+    private val stopwatches: MutableList<Stopwatch> = mutableListOf()
 
+    fun createStopwatch(): Stopwatch{
+        val stopWatch = Stopwatch(scope, timestampProvider)
+        stopwatches.add(stopWatch)
+        return stopWatch
+    }
+}
+
+class Stopwatch(private val scope: CoroutineScope, private val timestampProvider: TimestampProvider) {
     private val stopwatchStateHolder = StopwatchStateHolder(
         StopwatchStateCalculator(
             timestampProvider,

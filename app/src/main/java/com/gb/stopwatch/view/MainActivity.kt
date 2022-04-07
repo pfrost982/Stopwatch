@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
     private val stopwatchListOrchestrator =
         StopwatchListOrchestrator(CoroutineScope(Dispatchers.Main + SupervisorJob()))
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -26,17 +25,18 @@ class MainActivity : AppCompatActivity() {
         createStopwatch()
     }
 
-    private fun createStopwatch(){
+    private fun createStopwatch() {
         val stopwatchView = StopwatchItemBinding.inflate(layoutInflater)
         val textView = stopwatchView.textTime
+        val stopwatch = stopwatchListOrchestrator.createStopwatch()
         CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
-            stopwatchListOrchestrator.ticker.collect {
+            stopwatch.ticker.collect {
                 textView.text = it
             }
         }
-        stopwatchView.buttonStart.setOnClickListener { stopwatchListOrchestrator.start() }
-        stopwatchView.buttonPause.setOnClickListener { stopwatchListOrchestrator.pause() }
-        stopwatchView.buttonStop.setOnClickListener { stopwatchListOrchestrator.stop() }
+        stopwatchView.buttonStart.setOnClickListener { stopwatch.start() }
+        stopwatchView.buttonPause.setOnClickListener { stopwatch.pause() }
+        stopwatchView.buttonStop.setOnClickListener { stopwatch.stop() }
         binding.scrollView.addView(stopwatchView.root)
 
     }
