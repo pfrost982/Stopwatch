@@ -1,15 +1,27 @@
 package com.gb.stopwatch.viewmodel
 
-import com.gb.stopwatch.model.time.StopwatchStateHolder
-import com.gb.stopwatch.model.time.TimestampMillisecondsFormatter
+import com.gb.stopwatch.model.time.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class StopwatchListOrchestrator(
-    private val stopwatchStateHolder: StopwatchStateHolder,
-    private val scope: CoroutineScope
-) {
+class StopwatchListOrchestrator(private val scope: CoroutineScope) {
+
+    private val timestampProvider = object : TimestampProvider {
+        override fun getMilliseconds(): Long {
+            return System.currentTimeMillis()
+        }
+    }
+
+    private val stopwatchStateHolder = StopwatchStateHolder(
+        StopwatchStateCalculator(
+            timestampProvider,
+            ElapsedTimeCalculator(timestampProvider)
+        ),
+        ElapsedTimeCalculator(timestampProvider),
+        TimestampMillisecondsFormatter()
+    )
+
     private var job: Job? = null
     private val mutableTicker = MutableStateFlow(TimestampMillisecondsFormatter.DEFAULT_TIME)
     val ticker: StateFlow<String> = mutableTicker
