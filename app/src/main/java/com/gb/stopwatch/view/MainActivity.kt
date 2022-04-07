@@ -22,7 +22,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        createStopwatch()
+        binding.addFab.setOnClickListener {
+            createStopwatch()
+        }
     }
 
     private fun createStopwatch() {
@@ -37,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         stopwatchView.buttonStart.setOnClickListener { stopwatch.start() }
         stopwatchView.buttonPause.setOnClickListener { stopwatch.pause() }
         stopwatchView.buttonStop.setOnClickListener { stopwatch.stop() }
-        binding.scrollView.addView(stopwatchView.root)
+        binding.stopwatch.addView(stopwatchView.root)
 
     }
 }
