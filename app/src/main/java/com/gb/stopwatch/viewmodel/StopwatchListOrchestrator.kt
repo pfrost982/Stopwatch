@@ -5,14 +5,14 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class StopwatchListOrchestrator() {
+class StopwatchListOrchestrator {
     private val timestampProvider = object : TimestampProvider {
         override fun getMilliseconds(): Long {
             return System.currentTimeMillis()
         }
     }
 
-    private val stopwatchStateHolder: StopwatchStateHolder = StopwatchStateHolder(
+    private val stopwatchStateHolder = StopwatchStateHolder(
         StopwatchStateCalculator(
             timestampProvider,
             ElapsedTimeCalculator(timestampProvider)
