@@ -59,6 +59,4 @@ class StopwatchListOrchestrator(private val scope: CoroutineScope) {
         scope.coroutineContext.cancelChildren()
         job = null
     }
-
-
 }
